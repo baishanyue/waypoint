@@ -1,0 +1,45 @@
+{
+  "goal": "research hybrid retrieval",
+  "steps": [
+    {
+      "id": "collect",
+      "action": "gather_sources",
+      "inputs": { "topic": "$goal.topic" },
+      "description": "fetch two independent sources"
+    },
+    {
+      "id": "extract_primary",
+      "action": "extract_facts",
+      "inputs": { "source": "$collect.primary" },
+      "depends_on": ["collect"]
+    },
+    {
+      "id": "extract_secondary",
+      "action": "extract_facts",
+      "inputs": { "source": "$collect.secondary" },
+      "depends_on": ["collect"]
+    },
+    {
+      "id": "merge",
+      "action": "merge_facts",
+      "inputs": {
+        "left": "$extract_primary.facts",
+        "right": "$extract_secondary.facts"
+      },
+      "depends_on": ["extract_primary", "extract_secondary"]
+    },
+    {
+      "id": "verify",
+      "action": "verify_facts",
+      "inputs": { "facts": "$merge.facts" },
+      "depends_on": ["merge"],
+      "retries": 1
+    },
+    {
+      "id": "write",
+      "action": "compose_report",
+      "inputs": { "topic": "$goal.topic", "facts": "$verify.facts" },
+      "depends_on": ["verify"]
+    }
+  ]
+}
