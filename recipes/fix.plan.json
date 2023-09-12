@@ -1,0 +1,43 @@
+{
+  "goal": "fix failing regression",
+  "steps": [
+    {
+      "id": "reproduce",
+      "action": "run_checks",
+      "inputs": {
+        "target": "$goal.topic"
+      }
+    },
+    {
+      "id": "diagnose",
+      "action": "diagnose",
+      "inputs": {
+        "report": "$reproduce.report"
+      },
+      "depends_on": [
+        "reproduce"
+      ]
+    },
+    {
+      "id": "patch",
+      "action": "apply_patch",
+      "inputs": {
+        "diagnosis": "$diagnose.summary"
+      },
+      "depends_on": [
+        "diagnose"
+      ],
+      "retries": 1
+    },
+    {
+      "id": "verify",
+      "action": "run_checks",
+      "inputs": {
+        "target": "$goal.topic"
+      },
+      "depends_on": [
+        "patch"
+      ]
+    }
+  ]
+}
