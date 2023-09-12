@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waypoint — plans that survive contact with reality</title>
+<style>
+  :root{
+    --bg:#0B120E; --bg2:#0E1712; --ink:#EDF5E8; --muted:#7E8C80;
+    --line:rgba(242,245,247,.10); --accent:#C6F24E; --violet:#6FD3C7;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--muted)}
+  header{border-bottom:1px solid var(--line);padding:22px 0}
+  header .wrap{display:flex;justify-content:space-between;align-items:center}
+  .hero{padding:76px 0 56px;background:
+    radial-gradient(680px 340px at 78% 18%,rgba(126,231,208,.13),transparent 70%),
+    radial-gradient(520px 320px at 96% 82%,rgba(185,166,255,.10),transparent 70%)}
+  .hero .eyebrow{color:var(--accent)}
+  h1{font-size:clamp(44px,7vw,84px);font-weight:250;letter-spacing:.01em;
+    margin:18px 0 8px;line-height:1.02}
+  .tag{font-size:clamp(18px,2.6vw,26px);margin:0 0 10px}
+  .zh{color:var(--muted);font-size:16px;margin:0 0 34px}
+  .btns{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 22px;border:1px solid var(--line);
+    border-radius:2px;text-decoration:none;font-size:14px;
+    font-family:var(--mono);letter-spacing:.08em;transition:.18s}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.pri{background:var(--accent);color:#062018;border-color:var(--accent);font-weight:600}
+  .btn.pri:hover{color:#062018;opacity:.9}
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line)}
+  .card{background:var(--bg);padding:30px 26px}
+  .card h3{margin:0 0 10px;font-size:15px;font-family:var(--mono);
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .card p{margin:0;color:var(--muted);font-size:14.5px}
+  pre{background:var(--bg2);border:1px solid var(--line);border-radius:2px;
+    padding:26px 28px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;
+    line-height:1.85;color:#D7DEE4;margin:26px 0 0}
+  pre .c{color:#5C6873} pre .k{color:var(--accent)} pre .s{color:var(--violet)}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);margin-top:26px}
+  .metric{background:var(--bg);padding:26px 22px}
+  .metric b{display:block;font-size:30px;font-weight:300;letter-spacing:-.01em}
+  .metric span{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted)}
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);
+    font-size:13px;font-family:var(--mono);letter-spacing:.06em}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  @media(max-width:720px){.grid,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="eyebrow">Waypoint</span>
+  <span class="eyebrow">Open source</span>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <span class="eyebrow">Multi-agent orchestration</span>
+  <h1>Waypoint</h1>
+  <p class="tag">Plans that survive contact with reality.</p>
+  <p class="zh">长程任务的多智能体编排框架</p>
+  <div class="btns">
+    <a class="btn pri" href="https://github.com/baishanyue/waypoint">View source</a>
+    <a class="btn" href="https://github.com/baishanyue/waypoint#quickstart">Quickstart</a>
+  </div>
+</div></div>
+
+<section><div class="wrap">
+  <span class="eyebrow">Why</span>
+  <div class="grid" style="margin-top:26px">
+    <div class="card"><h3>Problem</h3><p>Agent frameworks hide control flow
+      inside callbacks. When a run fails you get a stack trace, not a plan, and
+      you cannot tell which step consumed the budget.</p></div>
+    <div class="card"><h3>Idea</h3><p>Model the run as an explicit DAG. Every
+      step names a tool, declares dependencies, and references earlier outputs
+      by path. The executor walks it deterministically and retries.</p></div>
+    <div class="card"><h3>Boundary</h3><p>An execution kernel, not a model
+      wrapper. Tools are plain callables, the planner is rule-based, and no
+      network call happens anywhere.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="eyebrow">Quickstart</span>
+<pre><span class="c">$</span> python -m waypoint run --goal <span class="s">"research hybrid retrieval"</span>
+
+<span class="k">ok</span>  6 steps
+collect          ok
+extract_primary  ok
+extract_secondary ok
+merge            ok
+verify           ok
+write            ok
+
+<span class="c"># partial run after a dependency failure</span>
+<span class="c"># a  failed   boom</span>
+<span class="c"># b  skipped  dependency failed: a</span></pre>
+</div></section>
+
+<section><div class="wrap">
+  <span class="eyebrow">Measured locally</span>
+  <div class="metrics">
+    <div class="metric"><b>66,526</b><span>runs / sec</span></div>
+    <div class="metric"><b>0.02 ms</b><span>run p50</span></div>
+    <div class="metric"><b>6</b><span>steps per plan</span></div>
+    <div class="metric"><b>0</b><span>runtime dependencies</span></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>Python 3.10+ · standard library</span>
+  <span>Waypoint</span>
+</div></footer>
+</body>
+</html>
